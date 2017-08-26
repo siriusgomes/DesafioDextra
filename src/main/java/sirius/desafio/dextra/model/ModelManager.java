@@ -1,12 +1,12 @@
 package sirius.desafio.dextra.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ModelManager {
 
-	private List<Ingrediente> listIngredientes = new ArrayList<Ingrediente>();
-	private List<Lanche> listLanches = new ArrayList<Lanche>();
+	private Map<String, Ingrediente> mapIngredientes = new HashMap<String, Ingrediente>();
+	private Map<String, Lanche> mapLanches = new HashMap<String, Lanche>();
 	
 	
 	// Aqui crio os ingredientes iniciais e os lanches iniciais.
@@ -18,35 +18,43 @@ public class ModelManager {
 		Ingrediente hamburguerDeCarne = new Ingrediente("Hamburguer de Carne", 3.0d);
 		Ingrediente ovo = new Ingrediente("Ovo", 0.80d);
 		Ingrediente queijo = new Ingrediente("Queijo", 1.50d);
-		listIngredientes.add(alface);
-		listIngredientes.add(bacon);
-		listIngredientes.add(hamburguerDeCarne);
-		listIngredientes.add(ovo);
-		listIngredientes.add(queijo);
+		mapIngredientes.put(alface.getNome(), alface);
+		mapIngredientes.put(bacon.getNome(), bacon);
+		mapIngredientes.put(hamburguerDeCarne.getNome(), hamburguerDeCarne);
+		mapIngredientes.put(ovo.getNome(), ovo);
+		mapIngredientes.put(queijo.getNome(), queijo);
 
 		// Criando os lanches
-		listLanches.add(new Lanche("X-Bacon", bacon, hamburguerDeCarne, queijo));
-		listLanches.add(new Lanche("X-Burger", hamburguerDeCarne, queijo));
-		listLanches.add(new Lanche("X-Egg", ovo, hamburguerDeCarne, queijo));
-		listLanches.add(new Lanche("X-Egg Bacon", ovo, bacon, hamburguerDeCarne, queijo));
+		Lanche xBacon = new Lanche("X-Bacon", bacon, hamburguerDeCarne, queijo);
+		Lanche xBurger = new Lanche("X-Burger", hamburguerDeCarne, queijo);
+		Lanche xEgg = new Lanche("X-Egg", ovo, hamburguerDeCarne, queijo);
+		Lanche xEggBacon = new Lanche("X-Egg Bacon", ovo, bacon, hamburguerDeCarne, queijo);
+
+		mapLanches.put(xBacon.getNome(), xBacon);
+		mapLanches.put(xBurger.getNome(), xBurger);
+		mapLanches.put(xEgg.getNome(), xEgg);
+		mapLanches.put(xEggBacon.getNome(), xEggBacon);
 		
 	}
-	
-	public List<Ingrediente> getListIngredientes() {
-		return listIngredientes;
+
+
+	public Map<String, Ingrediente> getMapIngredientes() {
+		return mapIngredientes;
 	}
 
 
-	public void setListIngredientes(List<Ingrediente> listIngredientes) {
-		this.listIngredientes = listIngredientes;
+	public void setMapIngredientes(Map<String, Ingrediente> mapIngredientes) {
+		this.mapIngredientes = mapIngredientes;
 	}
 
 
-	public List<Lanche> getListLanches() {
-		return listLanches;
+	public Map<String, Lanche> getMapLanches() {
+		return mapLanches;
 	}
 
-	public void setListLanches(List<Lanche> listLanches) {
-		this.listLanches = listLanches;
+
+	public void setMapLanches(Map<String, Lanche> mapLanches) {
+		this.mapLanches = mapLanches;
 	}
+
 }

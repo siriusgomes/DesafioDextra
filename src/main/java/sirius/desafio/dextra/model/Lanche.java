@@ -30,6 +30,10 @@ public class Lanche {
 		
 	}
 	
+	public Lanche(String nome) {
+		this.nome = nome;
+	}
+	
 	// ######################################################################## Getters e Setters ########################################################################
 	public String getNome() {
 		return nome;
@@ -57,56 +61,48 @@ public class Lanche {
 	 * */
 	public Double getValor() {
 		Double valor = listIngredientes.stream().mapToDouble(i -> i.getValor()).sum();
-		int promocao = getPromocao();
-		switch (promocao) {
-		case 1:
-			valor = valor * 0.9;
-			break;
-		case 2:
-			Long qtdHamburgerDeCarne = getQuantidadeDeIngrediente().get("Hamburger de Carne");
-			Long qtdPagoHamburgerDeCarne = qtdHamburgerDeCarne - qtdHamburgerDeCarne/3;
-			valor -= getIngrediente("Hamburger de Carne").getValor() * qtdHamburgerDeCarne;
-			valor += getIngrediente("Hamburger de Carne").getValor() * qtdPagoHamburgerDeCarne;
-			break;
-		case 3: 
-			Long qtdQueijo = getQuantidadeDeIngrediente().get("Queijo");
-			Long qtdPagoQueijo = qtdQueijo - qtdQueijo/3;
-			valor -= getIngrediente("Queijo").getValor() * qtdQueijo;
-			valor += getIngrediente("Queijo").getValor() * qtdPagoQueijo;
-			break;
+		try {
+			if (isMuitaCarne()) {
+				Long qtdHamburgerDeCarne = getQuantidadeDeIngrediente().get("Hamburguer de Carne");
+				Long qtdPagoHamburgerDeCarne = qtdHamburgerDeCarne - qtdHamburgerDeCarne/3;
+				valor -= getIngrediente("Hamburguer de Carne").getValor() * qtdHamburgerDeCarne;
+				valor += getIngrediente("Hamburguer de Carne").getValor() * qtdPagoHamburgerDeCarne;
+			}
+			if (isMuitoQueijo()) {
+				Long qtdQueijo = getQuantidadeDeIngrediente().get("Queijo");
+				Long qtdPagoQueijo = qtdQueijo - qtdQueijo/3;
+				valor -= getIngrediente("Queijo").getValor() * qtdQueijo;
+				valor += getIngrediente("Queijo").getValor() * qtdPagoQueijo;
+			}
+			if (isLight()) {
+				valor = valor * 0.9;
+			}
+		}
+		catch (Exception e) {
+			// Provavelmente o lanche não possui algum dos ingredientes das promoções, perfeitamente normal.
 		}
 		return valor;
 	}
 	
-	/**
-	 * Função que retorna o numero da promoção, caso o lanche se enquadre em alguma. 
-	 * */
-	private int getPromocao() {
-		// Promoção light
-		if (listIngredientes.contains(new Ingrediente("Alface")) && !listIngredientes.contains(new Ingrediente("Bacon"))) {
-			return 1;
-		}
-		
-		// Promoção muita carne
-		if (getQuantidadeDeIngrediente().get("Hamburger de Carne") > 0) {
-			return 2;
-		}
-	
-		// Promoção muito queijo
-		if (getQuantidadeDeIngrediente().get("Queijo") > 0) {
-			return 3;
-		}
-		
-		return 0;
+	private boolean isLight() {
+		return (listIngredientes.contains(new Ingrediente("Alface")) && !listIngredientes.contains(new Ingrediente("Bacon")));
 	}
 
+	private boolean isMuitaCarne() {
+		return getQuantidadeDeIngrediente().get("Hamburguer de Carne") >= 3;
+	}
+	
+	private boolean isMuitoQueijo() {
+		return getQuantidadeDeIngrediente().get("Queijo") >= 3;
+	}
+	
 	private Map<String, Long> getQuantidadeDeIngrediente() {
         Map<String, Long> qtdIngredientes = listIngredientes.stream().collect(Collectors.groupingBy(Ingrediente::getNome, Collectors.counting()));
 		return qtdIngredientes;
 	}
 
 	private Ingrediente getIngrediente(String nomeIngrediente) {
-		List<Ingrediente> resultado =listIngredientes.stream().filter(nome -> nome.equals(nomeIngrediente)).collect(Collectors.toList());
+		List<Ingrediente> resultado =listIngredientes.stream().filter(nome -> nome.equals(new Ingrediente(nomeIngrediente))).collect(Collectors.toList());
 		if (resultado.size() > 0) {
 			return resultado.get(0);
 		}
@@ -114,7 +110,28 @@ public class Lanche {
     }
 	
 	@Override
-	public String toString() {
-		return "Lanche [nome=" + nome + ", listIngredientes=" + listIngredientes + ", preço=" + listIngredientes.stream().mapToDouble(i -> i.getValor()).sum() + "]";
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((listIngredientes == null) ? 0 : listIngredientes.hashCode());
+		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+		return result;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this.nome.toUpperCase().equals(((Ingrediente) obj).getNome().toUpperCase())) {
+			return true;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Lanche [nome=" + nome + ", listIngredientes=" + listIngredientes + ", getValor()=" + getValor()
+				+ ", isLight()=" + isLight() + ", isMuitaCarne()=" + isMuitaCarne() + ", isMuitoQueijo()="
+				+ isMuitoQueijo() + "]";
+	}
+
+	
 }
