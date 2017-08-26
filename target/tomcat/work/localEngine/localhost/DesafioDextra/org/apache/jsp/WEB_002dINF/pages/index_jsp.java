@@ -52,7 +52,7 @@ public final class index_jsp extends org.apache.jasper.runtime.HttpJspBase
 
       out.write("<html>\n");
       out.write("<body>\n");
-      out.write("<h1>Maven + Spring MVC Web Project Example</h1>\n");
+      out.write("<h1>Bla</h1>\n");
       out.write(" \n");
       out.write("<h3>Message : ");
       out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.proprietaryEvaluate("${message}", java.lang.String.class, (PageContext)_jspx_page_context, null, false));
