@@ -34,6 +34,7 @@
 			</tr>
 		</table>
 		<input type="submit" class="update" title="Update" value="Update" />
+		<a href="../list">Voltar</a>
 	</form>
 
 </body>

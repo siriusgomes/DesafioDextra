@@ -1,8 +1,9 @@
 <html>
 <body>
-<h1>Bla</h1>
+<h1>Desafio Dextra</h1>
  
-<h3>Message : ${message}</h3>
-<h3>Counter : ${counter}</h3>	
+<a href=lanches/list>Lanches</a>
+<a href=ingredientes/list>Ingredientes</a>
+	
 </body>
 </html>

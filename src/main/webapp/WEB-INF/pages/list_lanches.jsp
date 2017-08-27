@@ -1,7 +1,8 @@
-<%@ page import="sirius.desafio.dextra.model.Lanche"%>
-<%@ page import="sirius.desafio.dextra.model.Ingrediente"%>
+<%@ page import="sirius.desafio.dextra.model.Ingrediente" %>
+<%@ page import="sirius.desafio.dextra.model.Lanche" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="java.util.HashMap" %>
 <html>
 <body>
 	<h1>Lanches</h1>

@@ -31,7 +31,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
-			<scope>test</scope>
 			<exclusions>
 		        <exclusion>
 		            <groupId>org.hamcrest</groupId>
@@ -45,7 +44,6 @@
 		    <groupId>org.hamcrest</groupId>
 		    <artifactId>hamcrest-library</artifactId>
 		    <version>${hamcrest.version}</version>
-		    <scope>test</scope>
 		</dependency>
 
 		<!-- Spring Core -->
@@ -128,7 +126,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<version>3.5.1</version>
 				<configuration>
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
@@ -138,8 +136,8 @@
 			<!-- For Maven Tomcat Plugin -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat8-maven-plugin</artifactId>
-				<version>3.0</version>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.2</version>
 				<configuration>
 					<path>/DesafioDextra</path>
 				</configuration>
