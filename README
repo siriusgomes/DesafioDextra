@@ -1,0 +1,22 @@
+Desafio desenvolvido conforme requisitos enviados por email pela Liliane Andrade da Silva.
+
+
+Nível escolhido: Médio
+
+Implementação dos requisitos; OK
+
+Relatório simples de justificativas para escolha do design de código;
+Os objetos se resumem a ingredientes e lanches. Cada um contém seus atributos e também metodos relacionados aos mesmos. 
+O Lanche possui diversos métodos para validar as promoções, já que as mesmas se dão conforme certos ingredientes nos lanches. 
+Design simples apenas para exibir os dados. Foi o que consegui fazer com o tempo pré-determinado.
+Utilizei alguns lambdas de java 8, o que faz com que seja necessário jdk8 para o projeto. 
+Os testes foram feitos com junit 4. É necessário rodar o arquivo "sirius.desafio.dextra.tests" -> AllTests.java. 
+Ele é uma suite de testes que irá rodar todos os outros testes. São eles: Teste de calculo de preço, de promoções e de valor de lanches do cardápio. 
+No arquivo AllTests.java, estão duas variáveis  variacaoInflacao e variacaoPromocao, elas configuram a precisão dos testes conforme a inflação e devem ser alteradas conforme desejado.
+
+
+Instruções para executar: 
+git clone https://github.com/siriusgomes/DesafioDextra.git
+cd DesafioDextra
+mvn package && mvn tomcat7:run
+acessar localhost:8080/DesafioDextra
