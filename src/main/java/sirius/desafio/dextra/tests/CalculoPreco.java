@@ -35,6 +35,4 @@ public class CalculoPreco {
 		assertEquals(20, modelManager.getMapLanches().get("X-50 Saladas").getValor(), AllTests.variacaoInflacao);
 		assertEquals(100, modelManager.getMapLanches().get("X-50 Bacons").getValor(), AllTests.variacaoInflacao);
 	}
-
-	
 }
