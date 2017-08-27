@@ -24,6 +24,7 @@
 			</tr>
 		</table>
 		<input type="submit" class="save" title="Salvar" value="Salvar" />
+		<a href="list">Voltar</a>
 	</form>
 
 </body>

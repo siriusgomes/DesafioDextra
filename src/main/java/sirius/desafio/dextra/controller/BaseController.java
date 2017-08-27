@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import sirius.desafio.dextra.model.Ingrediente;
+import sirius.desafio.dextra.model.Lanche;
 import sirius.desafio.dextra.model.ModelManager;
 
 
@@ -21,45 +22,118 @@ import sirius.desafio.dextra.model.ModelManager;
 public class BaseController {
 
 	private static int counter = 0;
-	private static final String VIEW_INDEX = "index";
 	private final static org.slf4j.Logger logger = LoggerFactory.getLogger(BaseController.class);
 	private static ModelManager db = new ModelManager();
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String welcome(ModelMap model) {
-
-		model.addAttribute("message", "Welcome");
-		model.addAttribute("counter", ++counter);
-		logger.debug("[welcome] counter : {}", counter);
+	public String welcome(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
 
 		// Spring uses InternalResourceViewResolver and return back index.jsp
-		return VIEW_INDEX;
+		return "index";
 
 	}
 
-	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
-	public String welcomeName(@PathVariable String name, ModelMap model) {
+	
+	/**
+	 * Requests Lanches */
 
-		model.addAttribute("message", "Welcome " + name);
-		model.addAttribute("counter", ++counter);
-		logger.debug("[welcomeName] counter : {}", counter);
-		return VIEW_INDEX;
+	@RequestMapping(value="/lanches/new", method = RequestMethod.GET)
+	public String getAddLanchePage(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
+		model.addAttribute("listIngredientes",  new ArrayList<Ingrediente>(db.getMapIngredientes().values()));
+		return "add_lanche";
+	}
+	
+	@RequestMapping(value="/lanches/add", method = RequestMethod.POST)
+	public ModelAndView addLanche(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
+		try {
+			String nome = request.getParameter("nome");
+			Lanche l = new Lanche(nome);
+			for (String key : db.getMapIngredientes().keySet()) {
+				for (int i = 0; i < Integer.parseInt(request.getParameter("qtd_" + key)); i++)
+					l.addIngrediente(db.getMapIngredientes().get(key)); 
+			}
+			db.getMapLanches().put(nome, l);
+		}
+		catch(Exception e) {
+			System.err.println(e.getMessage());
+		}
+        return new ModelAndView("redirect:list");
+	}
 
+	@RequestMapping(value="/lanches/update/{nome}", method = RequestMethod.GET)
+	public String getUpdateLanchesPage(HttpServletRequest request, @PathVariable String nome, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
+		try {
+			Lanche l = db.getMapLanches().get(nome);
+			if (l != null) { 
+				model.addAttribute("lanche",  l);
+				model.addAttribute("listIngredientes",  new ArrayList<Ingrediente>(db.getMapIngredientes().values()));
+				return "update_lanche";
+			}
+			else {
+				return "add_lanche";
+			}
+		} catch (Exception e) {
+			System.err.println(e.getMessage());
+			return null;
+		}
+	}
+
+	@RequestMapping(value="/lanches/update", method = RequestMethod.POST)
+	public ModelAndView updateLanches(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
+		try {
+			String nomeOriginal =  request.getParameter("nomeOriginal");
+			Lanche l = db.getMapLanches().get(nomeOriginal);
+			l.getListIngredientes().clear();
+			for (String key : db.getMapIngredientes().keySet()) {
+				for (int i = 0; i < Integer.parseInt(request.getParameter("qtd_" + key)); i++)
+					l.addIngrediente(db.getMapIngredientes().get(key)); 
+			}
+			
+			String nome = request.getParameter("nome");
+			l.setNome(nome);
+		}
+		catch(Exception e) {
+			System.err.println(e.getMessage());
+		}
+        return new ModelAndView("redirect:list");
+	}
+	
+	@RequestMapping(value="/lanches/delete/{name}", method = RequestMethod.GET)
+	public ModelAndView delete(HttpServletRequest request, @PathVariable String name, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
+		db.getMapLanches().remove(name);
+        return new ModelAndView("redirect:../list");
+	}
+
+
+	@RequestMapping(value="/lanches/list", method = RequestMethod.GET)
+	public String listCustomer(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
+	    model.addAttribute("listLanches",  new ArrayList<Lanche>(db.getMapLanches().values()));
+		return "list_lanches";
 	}
 	
 	
-	
-	
-	
-	
+	/**
+	 * ############################################################################################################################################################
+	 * Requests ingredientes.
+	 * ############################################################################################################################################################
+	 * */
 
 	@RequestMapping(value="/ingredientes/new", method = RequestMethod.GET)
-	public String getAddCustomerPage(ModelMap model) {
+	public String getAddIngredientePage(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
 		return "add_ingrediente";
 	}
 	
 	@RequestMapping(value="/ingredientes/add", method = RequestMethod.POST)
-	public ModelAndView add(HttpServletRequest request, ModelMap model) {
+	public ModelAndView addIngrediente(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
 
 	    try {
 	    	String nome = request.getParameter("nome");
@@ -73,7 +147,8 @@ public class BaseController {
 	}
 
 	@RequestMapping(value="/ingredientes/update/{nome}", method = RequestMethod.GET)
-	public String getUpdateCustomerPage(@PathVariable String nome, ModelMap model) {
+	public String getUpdateIngredientePage(HttpServletRequest request, @PathVariable String nome, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
 		try {
 			Ingrediente i = db.getMapIngredientes().get(nome);
 			if (i != null) { 
@@ -90,7 +165,8 @@ public class BaseController {
 	}
 
 	@RequestMapping(value="/ingredientes/update", method = RequestMethod.POST)
-	public ModelAndView update(HttpServletRequest request, ModelMap model) {
+	public ModelAndView updateIngrediente(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
 		try {
 			String nome = request.getParameter("nome");
 			String valor = request.getParameter("valor");
@@ -106,14 +182,16 @@ public class BaseController {
 	}
 	
 	@RequestMapping(value="/ingredientes/delete/{name}", method = RequestMethod.GET)
-	public ModelAndView delete(@PathVariable String name, ModelMap model) {
+	public ModelAndView deleteIngrediente(HttpServletRequest request, @PathVariable String name, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
 		db.getMapIngredientes().remove(name);
         return new ModelAndView("redirect:../list");
 	}
 
 
 	@RequestMapping(value="/ingredientes/list", method = RequestMethod.GET)
-	public String listCustomer(ModelMap model) {
+	public String listIngrediente(HttpServletRequest request, ModelMap model) {
+		logger.debug(request.getLocalAddr() + " - " + request.getRequestURI());
 	    model.addAttribute("listIngredientes",  new ArrayList<Ingrediente>(db.getMapIngredientes().values()));
 		return "list_ingredientes";
 	}

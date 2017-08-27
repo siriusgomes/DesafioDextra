@@ -96,7 +96,31 @@ public class Lanche {
 		return getQuantidadeDeIngrediente().get("Queijo") >= 3;
 	}
 	
-	private Map<String, Long> getQuantidadeDeIngrediente() {
+	public String getPromocao() {
+		String promocao = "";
+		if (isLight()) {
+			promocao += "Light";
+		}
+		if (isMuitaCarne()) {
+			if (promocao.length() > 0) {
+				promocao += ", Muita Carne";
+			}
+			else {
+				promocao += "Muita Carne";
+			}
+		}
+		if (isMuitoQueijo()) {
+			if (promocao.length() > 0) {
+				promocao += ", Muito Queijo";
+			}
+			else {
+				promocao += "Muito Queijo";
+			}
+		}
+		return promocao;
+	}
+	
+	public Map<String, Long> getQuantidadeDeIngrediente() {
         Map<String, Long> qtdIngredientes = listIngredientes.stream().collect(Collectors.groupingBy(Ingrediente::getNome, Collectors.counting()));
 		return qtdIngredientes;
 	}

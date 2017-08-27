@@ -5,6 +5,7 @@
 	<h1>Ingredientes</h1>
 
 	<a href="new">Adicionar ingrediente</a>
+	<a href="../">Voltar</a>
 	<hr />
 
 	<h2>Lista de Ingredientes</h2>

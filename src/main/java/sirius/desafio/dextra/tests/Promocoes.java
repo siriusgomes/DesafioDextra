@@ -75,8 +75,6 @@ public class Promocoes {
 		lanchePromoTodas.addIngrediente(modelManager.getMapIngredientes().get("Queijo"));
 		modelManager.getMapLanches().put(lanchePromoTodas.getNome(), lanchePromoTodas);
 		
-		System.out.println(lanchePromoMuitaCarne);
-		
 	}
 		
 	@Test
